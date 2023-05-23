@@ -1,6 +1,8 @@
 import { Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
-import { TestComponent } from "./pages/test/test.component";
+import { TemplateComponent } from "./pages/template/template.component";
+import { PackagesComponent } from "./packages/packages.component";
+import { TransactionsComponent } from "./transactions/transactions.component";
 
 export const appRoutes: Routes = [
     {
@@ -8,8 +10,18 @@ export const appRoutes: Routes = [
         component: AppComponent
     },
     {
-        path: 'test',
-        component: TestComponent
-    },
+        path: 'cad',
+        component: TemplateComponent,
+        children: [
+            {
+                path: 'packages',
+                component: PackagesComponent
+            },
+            {
+                path: 'transactions',
+                component: TransactionsComponent
+            }
+        ]
+    }
 
 ]

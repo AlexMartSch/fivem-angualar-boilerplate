@@ -1,0 +1,36 @@
+<div class="app">
+    <div class="cad">
+        <div class="cad-menu">
+            <div class="title">
+                {{ title }}
+            </div>
+            <div class="closeBtn" (click)="closeUI()">
+                <div class="btnCloseClicker" (click)="closeUI()">
+                  <mat-icon>close</mat-icon>
+                </div>
+            </div>
+        </div>
+        <div class="cad-body">
+          <nav mat-tab-nav-bar color="accent" style="margin-top: 15px;" [tabPanel]="tabPanel">
+            <a mat-tab-link *ngFor="let link of navLinks" color="warn"
+              [routerLink]="link.link"
+              routerLinkActive #rla="routerLinkActive"
+              [active]="rla.isActive"
+              >
+              <mat-icon class="tab-icon">{{ link.icon }}</mat-icon>
+
+              <ng-container>
+                {{ link.userTitle | translate}}
+              </ng-container>
+            </a>
+          </nav>
+
+          <div class="app-page">
+            <mat-tab-nav-panel #tabPanel >
+              <router-outlet></router-outlet>
+            </mat-tab-nav-panel>
+          </div>
+        </div>
+    </div>
+</div>
+
