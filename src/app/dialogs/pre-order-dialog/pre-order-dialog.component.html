@@ -1,0 +1,54 @@
+<div class="app">
+    <div class="cad">
+        <div class="cad-menu">
+            <div class="title">
+               Confirmando Compra
+            </div>
+        </div>
+        <div class="cad-body">
+          <div class="app-page" *ngIf="vipPackage">
+            <div class="image">
+              <img [defaultImage]="'/assets/placeholder.png'" [lazyLoad]="vipPackage.image">
+            </div>
+
+            <div class="description">
+              <p>
+                {{ vipPackage.description }}
+              </p>
+              
+              <table class="table table-dark text-center">
+                <thead>
+                  <tr>
+                    <th scope="col">USTED PAGA</th>
+                    <th scope="col">USTED RECIBE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <ng-container *ngIf="isFreePackage(vipPackage)">
+                      <td><b>¡GRATIS!</b></td>
+                    </ng-container>
+
+                    <ng-container *ngIf="!isFreePackage(vipPackage)">
+                      <td *ngIf="vipPackage.prices.CLP && vipPackage.prices.USD">${{ getPrice(vipPackage.prices.CLP) }} CLP / ${{ getPrice(vipPackage.prices.USD) }} USD</td>
+                      <td *ngIf="vipPackage.prices.USD && !vipPackage.prices.CLP">${{ getPrice(vipPackage.prices.USD) }} USD</td>
+                      <td *ngIf="vipPackage.prices.CLP && !vipPackage.prices.USD">${{ getPrice(vipPackage.prices.CLP) }} CLP</td>
+                    </ng-container>
+                    
+                    <td> {{ vipPackage.credits ? "x" + vipPackage.credits + " créditos VIP" : 'Paquete Personalizado' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+            <div class="footer">
+              <button [disabled]="loading" mat-raised-button color="warn" (click)="close()">VOLVER ATRÁS</button>
+              
+              <button *ngIf="isFreePackage(vipPackage)" [disabled]="loading" (click)="generateFreeOrder()" mat-raised-button color="accent">OBTENER GRATIS</button>
+              <button *ngIf="!isFreePackage(vipPackage)" [disabled]="loading" (click)="continuePayments()" mat-raised-button color="accent">SELECCIONAR METODO DE PAGO</button>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>

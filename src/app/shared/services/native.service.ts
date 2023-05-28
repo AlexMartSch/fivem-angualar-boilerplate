@@ -1,10 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { lastValueFrom, of, Subject, throwError } from 'rxjs';
+import { lastValueFrom, Observable, of, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { NativeMessageType } from '../interfaces/NativeMessageType';
 import { Settings } from '../interfaces/Settings.interface';
+import { PaymentMethod, VipData, VipHistory } from '../interfaces/VipData';
 
 
 @Injectable({
@@ -15,6 +16,7 @@ export class NativeService {
 
     private isServiceLoaded = false
     private resourceName = ""
+    private networkRequestCloseDialogs = new Subject<any>()
 
     private appSettings: Settings = {
         language: 'en',
@@ -37,56 +39,109 @@ export class NativeService {
             }
         ],
         translations: {
-            "REPORT_COMMAND_DESCRIPTION": "Open report UI",
-            "REPORT_DEFAULT_CHAT": "Chat initialized between Staff & Member",
-            "CREATED_AT": "Created At",
-            "UPDATED_AT": "Updated At",
-            "STATUS": "Status",
-            "SUBJECT": "Subject",
-            "CATEGORY": "Category",
-            "DESCRIPTION": "Description",
-            "VIEW_REPORT": "Viewing report",
-            "STATUS_WAITING": "Waiting",
-            "STATUS_COMPLETED": "Completed",
-            "STATUS_OPEN": "Open",
-            "FETCHING_REPORTS": "Fetching Reports",
-            "FETCHING_STATS": "Fetching Stats",
-            "FETCHING_NO_DATA": "No data available",
-            "REPORT_SYSTEM": "Report System",
-            "MENU_NEW_REPORT": "NEW REPORT",
-            "MENU_VIEW_REPORTS": "View Reports",
-            "MENU_STATS": "Stats",
-            "NEW_REPORT_TITLE": "OPEN REPORT",
-            "NEW_REPORT_SUBJECT": "Subject",
-            "NEW_REPORT_CATEGORY": "Category",
-            "NEW_REPORT_DESCRIPTION": "Description",
-            "NEW_REPORT_SUBMIT": "SUBMIT REPORT",
-            "VIEW_REPORT_REPORTER": "Reporter",
-            "VIEW_REPORT_ASSIGNED": "Staff Assigned",
-            "VIEW_REPORT_TAKE_TICKET": 'Take Ticket',
-            "VIEW_REPORT_STEAMNAME": "Steamname",
-            "VIEW_REPORT_STAFFACTIONS": "Staff Actions",
-            "VIEW_REPORT_SESSIONSLOG": "Sessions Logs",
-            "VIEW_REPORT_DEATRHSLOG": "Deaths Logs",
-            "CHAT_SYSTEM_NAME": "System",
-            "CHAT_SYSTEM_FIRST_MESSAGE": "This is a section to write directly with the staff, please be respectful and have a civil conversation.",
-            "TOAST_STATUS_UPDATE": "Status Updated!",
-            "REPORT_CREATED_NOTIFY_USER": "Report #%s Sended!",
-            "REPORT_CRAETE_NOTIFY_ADMIN": "New report received: ID: %s | Subject: %s | Author: %s (%s)",
+            "MENU_PACKAGES": 'Paquetes VIP',
+            "MENU_TRANSACTIONS": "Transacciones"
         }
         
     }
 
-    constructor(private httpClient: HttpClient) {}
+    private vipData: VipData = {
+        history: [
+            {
+                id          : 2,
+                internalId  : "abc123",
+                subject     : "TEsting",
+                price       : 2.7 ,
+                status      : 2,
+                buy_at      : new Date()
+            }
+        ],
+        packages: [
+            {
+                InternalID  : "abc1234",
+                image       : "https://i.imgur.com/OpV8Gq9.png",
+                description : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius repudiandae, querat a test vitae ipsa?",
+                prices      : {
+                    CLP: 1000,
+                    USD: 2.7
+                },
+                credits     : 100 
+            },
+            {
+                InternalID  : "abc12345",
+                image       : "https://i.imgur.com/OpV8Gq9.png",
+                description : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius repudiandae, querat a test vitae ipsa?",
+                prices      : {
+                    CLP: 0,
+                    USD: 2.7
+                },
+                credits     : 100 
+            },
+            {
+                InternalID  : "abc12346",
+                image       : "https://i.imgur.com/OpV8Gq9.png",
+                description : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius repudiandae, querat a test vitae ipsa?",
+                prices      : {
+                    CLP: 1000,
+                },
+                credits     : 100 
+            },
+            {
+                InternalID  : "abc12347",
+                image       : "https://i.imgur.com/OpV8Gq9.png",
+                description : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius repudiandae, querat a test vitae ipsa?",
+                prices      : {
+                    USD: 1.7,
+                },
+                credits     : 100 
+            },
+        ],
+        userData: {
+            email: "",
+            username: ""
+        },
+        payments: [
+            "flow",
+            "paypal",
+            "mercadopago"
+        ]
+    }
+
+    public paymentsMethods: PaymentMethod[] = [
+        {
+            id: 'flow',
+            image: 'https://i.imgur.com/idWSQjm.png'
+        },
+        {
+            id: 'paypal',
+            image: 'https://i.imgur.com/4TjbsNh.png'
+        },
+        {
+            id: 'mercadopago',
+            image: 'https://i.imgur.com/kt1sbAL.png'
+        }
+    ]
+
+    constructor(private httpClient: HttpClient, private router: Router) {}
 
     public getAppSettings = () => this.appSettings  
+    public getVipData = () => this.vipData
+    public addViphistory = (vipHistory: VipHistory) => this.vipData.history.unshift(vipHistory)
+    public updateStatus = (orderId: number, status: number) => {
+        let vipPackage = this.vipData.history.findIndex(p => p.id == orderId)
+
+        if(vipPackage >= 0){
+            this.vipData.history[vipPackage].status = status
+        }
+    }
+    public needCloseDialog = () => this.networkRequestCloseDialogs
 
     SetupNativeService() {
         if (!this.isServiceLoaded) {
             window.addEventListener('message', this.handleNativeEvent.bind(this))
             window.addEventListener('keyup', this.handleKeyboardEvent.bind(this))
 
-            console.log('[Boilerplate] ==> The UI has been loaded.');
+            console.log('[PayFlow] ==> The UI has been loaded.');
             this.isServiceLoaded = true
         }
     }
@@ -116,6 +171,14 @@ export class NativeService {
             switch (eventMessage.action) {
                 case NativeMessageType.SET_RESOURCE_NAME:
                     this.resourceName = eventMessage.data.resourceName;
+                    break;
+                case NativeMessageType.OPEN_UI:
+                    this.router.navigateByUrl('/cad/packages')
+                    this.vipData = eventMessage.data
+                    break;
+                case NativeMessageType.CLOSE_UI:
+                    this.router.navigateByUrl('/')
+                    this.networkRequestCloseDialogs.next(true)
                     break;
                 default:
                     console.log(`Event is invalid or event handler is missing for event message: ${event.data.message}`);

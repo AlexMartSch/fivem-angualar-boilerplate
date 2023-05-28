@@ -1,0 +1,34 @@
+<div class="app-payment">
+    <div class="cad">
+        <div class="cad-menu">
+            <div class="title">
+               Realizando Pago
+            </div>
+        </div>
+        <div class="cad-body">
+          <div class="app-page-payment">
+
+            <div class="description">
+                <h1 class="lead p-3 text-center"><b>Espere a que cargue la plataforma de pagos Flow</b>. Si ya ha completado el pago se cerrará automáticamente esta ventana y será procesado en segundos.</h1>
+                <div *ngIf="!paymentUrl" class="container p-5 center-page-payment">
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <iframe *ngIf="paymentUrl" width="100%" style="height:75vh;" [src]="paymentUrl | safe" frameborder="0" allowfullscreen="false" ></iframe>
+                
+
+            </div>
+
+            <div class="footer">
+              <button [disabled]="loading" (click)="cancelOrder()" [disabled]="!paymentUrl && !noTokenGiven" mat-raised-button color="warn">
+                <mat-spinner *ngIf="loading" diameter="20" color="accent"></mat-spinner> <span *ngIf="!loading">CANCELAR COMPRA</span>
+              </button>
+              <button (click)="close()" [disabled]="!paymentUrl" mat-raised-button color="primary" >CONTINUAR LUEGO</button>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+

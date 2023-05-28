@@ -10,18 +10,18 @@ import { NativeService } from 'src/app/shared/services/native.service';
 export class TemplateComponent {
   title: string = "VIP"
   requestLoading: boolean = false
-  activeLinkIndex = -1
+  activeLinkIndex = 0
 
   navLinks = [
     {
       link: '/cad/packages',
-      userTitle: 'MENU_NEW_REPORT',
-      icon: 'add',
+      userTitle: 'MENU_PACKAGES',
+      icon: 'store',
       index: 0
     },
     {
       link: '/cad/transactions',
-      userTitle: 'MENU_VIEW_REPORTS_AS_USER',
+      userTitle: 'MENU_TRANSACTIONS',
       icon: 'view_timeline',
       index: 1
     },
@@ -41,7 +41,7 @@ export class TemplateComponent {
   }
 
   async closeUI(){
-    const response = await this.nativeService.FetchData('closeUI', {}) 
+    const response = await this.nativeService.FetchData('CloseUI', {}, {success:true}) 
     if (!response.error)
       this.goToURL('/')
   }

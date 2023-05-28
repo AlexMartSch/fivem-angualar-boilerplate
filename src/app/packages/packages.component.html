@@ -1,19 +1,27 @@
 <div class="packages row">
 
 
-    <div class="package col-4" *ngFor="let package of [0,0,0,0,0,0,0,0,0,0,0,0]">
+    <div class="package col-4" *ngFor="let package of native.getVipData().packages">
         <div class="image">
-            <img src="https://i.imgur.com/OpV8Gq9.png">
+            <img [defaultImage]="'/assets/placeholder.png'" [lazyLoad]="package.image">
         </div>
         <div class="description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius repudiandae, quaerat a  test vitae ipsa?
+           {{ package.description }}
         </div>
         <div class="footer">
-            <div class="price">
-                <b class="">$ 15.200</b>
+            <div class="prices">
+                <span *ngIf="isFreePackage(package)">
+                    <b>¡GRATIS!</b>
+                </span>
+
+                <span class="prices-list" *ngIf="!isFreePackage(package)">
+                    <b *ngIf="package.prices.CLP">$ {{ getPrice(package.prices.CLP) }} CLP</b>
+                    <span *ngIf="package.prices.USD" class="small-text"><b class="">$ {{ getPrice(package.prices.USD) }} USD</b></span>
+                </span>
+                
             </div>
             <div class="pay">
-                <button mat-raised-button color="accent">PAGAR</button>
+                <button (click)="openDialog(package)" mat-raised-button color="accent">PAGAR</button>
             </div>
         </div>
     </div>

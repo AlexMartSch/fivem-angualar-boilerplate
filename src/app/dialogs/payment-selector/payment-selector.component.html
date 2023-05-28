@@ -1,0 +1,43 @@
+<div class="app">
+    <div class="cad">
+        <div class="cad-menu">
+            <div class="title">
+               Seleccione su método de pago
+            </div>
+        </div>
+        <div class="cad-body">
+          <div class="app-page">
+            <div class="description">
+                <h1 class="lead p-3 text-center"><b>Seleccione su pasarela de pagos preferida</b>.</h1>
+                
+                <div class="methodPayment row">
+                  <div class="col-4" [id]="'payment-'+method" *ngFor="let method of processPaymentsMethodWithCurrency()">
+                    <div class="methodBackground" (click)="selectPaymentMethod(method)" [class.selectedMethod]="selectedPaymentMethod === method">
+                      <img class="imagePayment" [src]="getPaymentMethodDetails(method)?.image">
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="footer">
+              <button class="btnW" [disabled]="loading" (click)="close()" mat-raised-button color="warn">
+                <span >VOLVER</span>
+              </button>
+              <div *ngIf="loading" class="loading">
+                <mat-spinner diameter="40" color="accent"></mat-spinner>
+                <p class="lead">Generando orden de compra</p>
+              </div>
+              <div *ngIf="errorMsg != ''" class="loading">
+                <p class="lead text-center">
+                  ERROR AL GENERAR LA COMPRA: <br>
+                  <span class="errorMessage">{{ errorMsg }}</span>
+                </p>
+              </div>
+              <button class="btnW" [disabled]="!selectedPaymentMethod || loading" (click)="confirmBuy()" mat-raised-button color="accent">
+                <span >PAGAR</span>
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>

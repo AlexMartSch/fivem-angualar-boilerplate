@@ -38,3 +38,18 @@
         align-items: center;
     }
 }
+
+.prices{
+    display: flex;
+    flex-direction: column;
+    
+    .prices-list{
+        display: flex;
+        flex-direction: column;
+    }
+   
+}
+
+.small-text{
+    font-size: 12px;
+}
