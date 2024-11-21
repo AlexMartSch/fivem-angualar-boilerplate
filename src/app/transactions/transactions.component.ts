@@ -48,6 +48,10 @@ export class TransactionsComponent implements AfterViewInit {
           background: '#222831',
           color: '#FFFFFF',
         })
+        
+        setTimeout(() => {
+          if(order) order.synced = false
+        }, 2000);
       }else{
         setTimeout(() => {
           if (order){
@@ -61,8 +65,8 @@ export class TransactionsComponent implements AfterViewInit {
     }
   }
 
-  async continuePayment(orderId: number){
-    const response = await this.native.FetchData<{flowToken: string, paymentMethod: string}>('retryTransactionOrder', {orderId})
+  async continuePayment(transactionId: number){
+    const response = await this.native.FetchData<{platformToken: string, paymentMethod: string}>('retryTransactionByTransactionId', {transactionId})
     if(response.error){
       Swal.fire({
         title: 'Ha ocurrido un error',
@@ -82,7 +86,7 @@ export class TransactionsComponent implements AfterViewInit {
         panelClass: 'dialogClass',
         disableClose: true,
         data: {
-          flowOrder: response.flowToken,
+          platformToken: response.platformToken,
           payMethod: response.paymentMethod
         }
       });
@@ -104,9 +108,31 @@ export class TransactionsComponent implements AfterViewInit {
     }
   }
 
-  getPrice(price: number){
+  getPrice(price: number, currency: string){
+    if(price == -1){
+      return "GRATIS"
+    }
+
     var parts = price.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return parts.join(".");
+    return `$${parts.join(".")} ${currency}`;
+  }
+
+  async copyId(orderId: string){
+
+    const clipElem = document.createElement('textarea');
+    clipElem.value = orderId;
+    document.body.appendChild(clipElem);
+    clipElem.select();
+    document.execCommand('copy');
+    document.body.removeChild(clipElem);
+
+    Swal.fire({
+      title: '¡Listo!',
+      text: 'Se ha copiado el ID de la transacción.',
+      icon: 'success',
+      background: '#222831',
+      color: '#FFFFFF',
+    })
   }
 }

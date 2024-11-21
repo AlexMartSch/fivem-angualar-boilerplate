@@ -33,6 +33,7 @@
                       <td *ngIf="vipPackage.prices.CLP && vipPackage.prices.USD">${{ getPrice(vipPackage.prices.CLP) }} CLP / ${{ getPrice(vipPackage.prices.USD) }} USD</td>
                       <td *ngIf="vipPackage.prices.USD && !vipPackage.prices.CLP">${{ getPrice(vipPackage.prices.USD) }} USD</td>
                       <td *ngIf="vipPackage.prices.CLP && !vipPackage.prices.USD">${{ getPrice(vipPackage.prices.CLP) }} CLP</td>
+                      <td *ngIf="vipPackage.prices.CREDITS">${{ getPrice(vipPackage.prices.CREDITS) }} Districoins</td>
                     </ng-container>
                     
                     <td> {{ vipPackage.credits ? "x" + vipPackage.credits + " créditos VIP" : 'Paquete Personalizado' }}</td>
@@ -44,7 +45,16 @@
 
             <div class="footer">
               <button [disabled]="loading" mat-raised-button color="warn" (click)="close()">VOLVER ATRÁS</button>
-              
+              <div *ngIf="loading" class="loading">
+                <mat-spinner diameter="40" color="accent"></mat-spinner>
+                <p class="lead">Generando orden gratuita</p>
+              </div>
+              <div *ngIf="errorMsg != ''" class="loading">
+                <p class="lead text-center">
+                  ERROR AL GENERAR LA COMPRA: <br>
+                  <span class="errorMessage">{{ errorMsg }}</span>
+                </p>
+              </div>
               <button *ngIf="isFreePackage(vipPackage)" [disabled]="loading" (click)="generateFreeOrder()" mat-raised-button color="accent">OBTENER GRATIS</button>
               <button *ngIf="!isFreePackage(vipPackage)" [disabled]="loading" (click)="continuePayments()" mat-raised-button color="accent">SELECCIONAR METODO DE PAGO</button>
             </div>

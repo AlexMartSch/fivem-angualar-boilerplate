@@ -14,16 +14,22 @@ export class TemplateComponent {
 
   navLinks = [
     {
+      link: '/cad/credits',
+      userTitle: 'MENU_COINS',
+      icon: 'currency_exchange',
+      index: 0
+    },
+    {
       link: '/cad/packages',
       userTitle: 'MENU_PACKAGES',
       icon: 'store',
-      index: 0
+      index: 1
     },
     {
       link: '/cad/transactions',
       userTitle: 'MENU_TRANSACTIONS',
       icon: 'view_timeline',
-      index: 1
+      index: 2
     },
   ]
 

@@ -3,14 +3,14 @@
   
   <div class="mat-elevation-z8">
     <div class="options">
-        <mat-paginator [pageSizeOptions]="[10, 50, 100]" aria-label="Seleccione la página de transacciones"></mat-paginator>
-        <mat-form-field style="width: 30%;" color="accent" appearance="outline">
+        <mat-paginator color="accent" [pageSizeOptions]="[10, 50, 100]" aria-label="Seleccione la página de transacciones"></mat-paginator>
+        <mat-form-field appearance="outline">
             <mat-label>Buscador</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="Buscador por concepto" #input>
         </mat-form-field>
     </div>
     
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
   
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -39,7 +39,7 @@
       <!-- Fruit Column -->
       <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> MONTO </th>
-        <td mat-cell *matCellDef="let row"> ${{getPrice(row.price)}} </td>
+        <td mat-cell *matCellDef="let row"> {{getPrice(row.price, row.currency)}} </td>
       </ng-container>
 
       <ng-container matColumnDef="created_at">
@@ -49,16 +49,18 @@
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
-        <td mat-cell *matCellDef="let row"> 
+        <td mat-cell *matCellDef="let row" class="d-flex justify-content-between"> 
             <button *ngIf="row.status == 1" (click)="continuePayment(row.id)" mat-raised-button color="primary">CONTINUAR PAGO</button>
             <button *ngIf="row.status == 3" (click)="continuePayment(row.id)" mat-raised-button color="warn">REINTENTAR PAGO</button>
             <div class="buttonFlex" *ngIf="row.status == 2">
-                <mat-spinner *ngIf="row.synced" style="margin-right: 10px;" diameter="20" color="warn"></mat-spinner>
-                <button [disabled]="row.synced" (click)="syncPayment(row.id)" mat-raised-button color="accent">
+                <mat-spinner *ngIf="row.synced" style="margin-right: 10px;" diameter="20" color="accent"></mat-spinner>
+                <button [disabled]="row.synced" (click)="syncPayment(row.id)" mat-raised-button color="primary">
                     {{ !row.synced ? "SINCRONIZAR" : "SINCRONIZANDO"}}
                 </button>
             </div>
-            
+            <button (click)="copyId(row.orderId)" mat-mini-fab aria-label="Copy transaction Id" matTooltip="Copiar ID de transacción.">
+              <mat-icon>receipt_long</mat-icon>
+            </button>
         </td>
       </ng-container>
   

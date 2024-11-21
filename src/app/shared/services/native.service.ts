@@ -15,7 +15,7 @@ import { PaymentMethod, VipData, VipHistory } from '../interfaces/VipData';
 export class NativeService {
 
     private isServiceLoaded = false
-    private resourceName = ""
+    private resourceName = "abp_PayFlow"
     private networkRequestCloseDialogs = new Subject<any>()
 
     private appSettings: Settings = {
@@ -23,7 +23,7 @@ export class NativeService {
         refreshInterval: 5000,
         asAdmin: true,
 
-        scriptName: 'nex_advReports',
+        scriptName: 'abp_PayFlow',
         categories: [],
         states: [
             {
@@ -40,6 +40,7 @@ export class NativeService {
         ],
         translations: {
             "MENU_PACKAGES": 'Paquetes VIP',
+            "MENU_COINS": 'Districoins',
             "MENU_TRANSACTIONS": "Transacciones"
         }
         
@@ -53,7 +54,9 @@ export class NativeService {
                 subject     : "TEsting",
                 price       : 2.7 ,
                 status      : 2,
-                buy_at      : new Date()
+                currency    : 'CLP',
+                buy_at      : new Date(),
+                orderId     : 'abc123'
             }
         ],
         packages: [
@@ -65,17 +68,19 @@ export class NativeService {
                     CLP: 1000,
                     USD: 2.7
                 },
-                credits     : 100 
+                credits     : 100,
+                limit: 1
             },
             {
-                InternalID  : "abc12345",
+                InternalID  : "free-test-package",
                 image       : "https://i.imgur.com/OpV8Gq9.png",
                 description : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius repudiandae, querat a test vitae ipsa?",
                 prices      : {
                     CLP: 0,
                     USD: 2.7
                 },
-                credits     : 100 
+                credits     : 100,
+                globalLimit: 5
             },
             {
                 InternalID  : "abc12346",
@@ -93,7 +98,9 @@ export class NativeService {
                 prices      : {
                     USD: 1.7,
                 },
-                credits     : 100 
+                credits     : 100,
+                limit: 2,
+                globalLimit: 10
             },
         ],
         userData: {
@@ -103,14 +110,16 @@ export class NativeService {
         payments: [
             "flow",
             "paypal",
-            "mercadopago"
+            "mercadopago",
+            "fintoc",
+            'credits'
         ]
     }
 
     public paymentsMethods: PaymentMethod[] = [
         {
             id: 'flow',
-            image: 'https://i.imgur.com/idWSQjm.png'
+            image: '/assets/payments/flow.png',
         },
         {
             id: 'paypal',
@@ -118,7 +127,15 @@ export class NativeService {
         },
         {
             id: 'mercadopago',
-            image: 'https://i.imgur.com/kt1sbAL.png'
+            image: '/assets/payments/mercadopago.png'
+        },
+        {
+            id: 'fintoc',
+            image: '/assets/fintoc.png'
+        },
+        {
+            id: 'credits',
+            image: '/assets/payments/credits.png'
         }
     ]
 
@@ -169,11 +186,8 @@ export class NativeService {
 
         if (eventMessage.action !== undefined) {
             switch (eventMessage.action) {
-                case NativeMessageType.SET_RESOURCE_NAME:
-                    this.resourceName = eventMessage.data.resourceName;
-                    break;
                 case NativeMessageType.OPEN_UI:
-                    this.router.navigateByUrl('/cad/packages')
+                    this.router.navigateByUrl('/cad/credits')
                     this.vipData = eventMessage.data
                     break;
                 case NativeMessageType.CLOSE_UI:

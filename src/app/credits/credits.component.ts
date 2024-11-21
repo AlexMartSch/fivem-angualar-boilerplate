@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PreOrderDialogComponent } from '../dialogs/pre-order-dialog/pre-order-dialog.component';
 import { NativeService } from '../shared/services/native.service';
+import { PreOrderDialogComponent } from '../dialogs/pre-order-dialog/pre-order-dialog.component';
 import { VipPackage } from '../shared/interfaces/VipData';
 
 @Component({
-  selector: 'app-packages',
-  templateUrl: './packages.component.html',
-  styleUrls: ['./packages.component.scss']
+  selector: 'app-credits',
+  templateUrl: './credits.component.html',
+  styleUrls: ['./credits.component.scss']
 })
-export class PackagesComponent {
+export class CreditsComponent {
 
-  packages: VipPackage[] = []
-  
+  creditsPackages: VipPackage[] = []
+
   constructor(public dialog: MatDialog, public native: NativeService) {
-    this.packages = native.getVipData().packages.filter(p => (!p.credits || p.credits == undefined))
+    this.creditsPackages = native.getVipData().packages.filter(p => (p.credits && p.credits > 0))
   }
 
   openDialog(vipPackage: VipPackage): void {

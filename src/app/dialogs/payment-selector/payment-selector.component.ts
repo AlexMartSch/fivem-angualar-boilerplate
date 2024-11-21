@@ -34,9 +34,11 @@ export class PaymentSelectorComponent {
       let enablePayments: any[] = []
 
       availablePayments.forEach(payment => {
-        if(payment == "flow" && this.vipPackage.prices.CLP){
+        if((payment == "flow" || payment == "mercadopago" || payment == "fintoc") && this.vipPackage.prices.CLP){
           enablePayments.push(payment)
         }else if(payment == "paypal" && this.vipPackage.prices.USD){
+          enablePayments.push(payment)
+        }else if(payment == "credits" && this.vipPackage.prices.CREDITS){
           enablePayments.push(payment)
         }
       })
@@ -54,9 +56,15 @@ export class PaymentSelectorComponent {
       this.loading = true
   
       const response = await this.native.FetchData<{platformToken: string, transaction: VipHistory}>('createTransactionOrder', {internalId: this.vipPackage.InternalID, paymentMethod: this.selectedPaymentMethod}, {
-        //error: "ABP - ErrX42"
-        platformToken: "4E2012438Y712054N",
-        transaction: {}
+        platformToken: "pi_eXp1RgS79NGpwWbo_sec_VisQFhEi7BPBux612qNk7uji",
+        transaction: {
+          id          : 1,
+          internalId  : "string",
+          subject     : "string",
+          price       : 1000,
+          status      : 1,
+          synced     : false
+        }
       })
   
       if (response.error){
@@ -69,6 +77,10 @@ export class PaymentSelectorComponent {
           
           response.transaction.buy_at = new Date()
           this.native.addViphistory(response.transaction)
+
+          if (this.selectedPaymentMethod == 'credits' || this.selectedPaymentMethod == 'free'){
+            return
+          }
 
           this.dialog.open(PaymentDialogComponent, {
             width: '95vw',

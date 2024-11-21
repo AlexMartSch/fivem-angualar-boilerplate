@@ -3,6 +3,7 @@ import { AppComponent } from "./app.component";
 import { TemplateComponent } from "./pages/template/template.component";
 import { PackagesComponent } from "./packages/packages.component";
 import { TransactionsComponent } from "./transactions/transactions.component";
+import { CreditsComponent } from "./credits/credits.component";
 
 export const appRoutes: Routes = [
     {
@@ -20,6 +21,10 @@ export const appRoutes: Routes = [
             {
                 path: 'transactions',
                 component: TransactionsComponent
+            },
+            {
+                path: 'credits',
+                component: CreditsComponent
             }
         ]
     }

@@ -18,6 +18,7 @@ import { SafePipe } from './shared/pipe/sanitizeUrl.pipe';
 import { PaymentSelectorComponent } from './dialogs/payment-selector/payment-selector.component';
 import { LAZYLOAD_IMAGE_HOOKS, LazyLoadImageModule, ScrollHooks } from 'ng-lazyload-image';
 import { PaymentDialogComponent } from './dialogs/payment-dialog/payment-dialog.component';
+import { CreditsComponent } from './credits/credits.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { PaymentDialogComponent } from './dialogs/payment-dialog/payment-dialog.
     PreOrderDialogComponent,
     SafePipe,
     PaymentSelectorComponent,
-    PaymentDialogComponent
+    PaymentDialogComponent,
+    CreditsComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

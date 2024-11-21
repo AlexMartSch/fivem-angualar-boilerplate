@@ -1,5 +1,7 @@
 <div class="packages row">
-    <div class="package col-4" *ngFor="let package of packages">
+
+
+    <div class="package col-4" *ngFor="let package of creditsPackages">
         <div class="image">
             <img alt="" [defaultImage]="'/assets/placeholder.png'" [lazyLoad]="package.image">
         </div>
@@ -14,16 +16,14 @@
 
                 <span class="prices-list" *ngIf="!isFreePackage(package)">
                     <b *ngIf="package.prices.CLP">$ {{ getPrice(package.prices.CLP) }} CLP</b>
-                    <b *ngIf="package.prices.CREDITS">$ {{ getPrice(package.prices.CREDITS) }} Créditos</b>
                     <span *ngIf="package.prices.USD" class="small-text"><b class="">$ {{ getPrice(package.prices.USD) }} USD</b></span>
                 </span>
             </div>
             <div class="pay">
                 <span class="limits" *ngIf="package.limit">Limite de {{package.limit}}</span>
                 <!-- <span class="limits" *ngIf="package.globalLimit">Stock {{package.globalLimit}}</span> -->
-                <button (click)="openDialog(package)" mat-raised-button color="accent">PAGAR</button>
+                <button (click)="openDialog(package)" mat-raised-button color="accent">COMPRAR</button>
             </div>
         </div>
     </div>
-
 </div>

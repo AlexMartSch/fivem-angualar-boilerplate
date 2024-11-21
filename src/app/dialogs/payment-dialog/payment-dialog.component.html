@@ -9,14 +9,17 @@
           <div class="app-page-payment">
 
             <div class="description">
-                <h1 class="lead p-3 text-center"><b>Espere a que cargue la plataforma de pagos Flow</b>. Si ya ha completado el pago se cerrará automáticamente esta ventana y será procesado en segundos.</h1>
+                <h1 class="lead p-3 text-center"><b>Espere a que cargue la plataforma de pagos</b>. Esta ventana se cerrará automáticamente una vez completado el pago.</h1>
                 <div *ngIf="!paymentUrl" class="container p-5 center-page-payment">
                     <div class="spinner-grow text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <iframe *ngIf="paymentUrl" width="100%" style="height:75vh;" [src]="paymentUrl | safe" frameborder="0" allowfullscreen="false" ></iframe>
-                
+                <div *ngIf="paymentUrl=='fintoc'">
+                  <button mat-raised-button color="primary" (click)="loadFintocData()">REINTENTAR</button>
+                </div>
+                <iframe id="paymentflow" *ngIf="paymentUrl && paymentUrl!='fintoc'" loading="lazy" width="100%" style="height:75vh;" [src]="paymentUrl | safe" frameborder="0" referrerpolicy="origin-when-cross-origin" allowfullscreen="false" ></iframe>
+                <!-- <embed *ngIf="paymentUrl" [src]="paymentUrl | safe" width="100%" style="height:75vh;" /> -->
 
             </div>
 
@@ -30,5 +33,3 @@
         </div>
     </div>
 </div>
-
-

@@ -41,9 +41,11 @@ export class PreOrderDialogComponent {
   }
 
   async generateFreeOrder(){
+    this.loading = true
+    this.errorMsg = ''
+
     const response = await this.native.FetchData<{platformToken: string, transaction: VipHistory}>('createTransactionOrder', {internalId: this.vipPackage.InternalID, paymentMethod: "free"}, {
-      //error: "ABP - ErrX42"
-      transaction: {}
+      error: "ABP - ErrX42"
     })
 
     if (response.error){

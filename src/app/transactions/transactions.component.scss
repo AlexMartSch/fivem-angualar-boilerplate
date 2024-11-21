@@ -2,14 +2,30 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
+    align-items: center;
+    background: #d5bc13;
+    height: 7vh;
+
+    mat-form-field{
+        width: 30%;
+        padding: 20px 10px 0;
+        padding-bottom: 0;
+
+        input{
+            color: white;
+        }
+    }
 }
 
 .mat-mdc-table {
-    background: #222831;
+    background: #354254;
+    color: white;
+    padding: 10px;
 }
 
 .mat-mdc-paginator {
-    background: #222831;
+    background: #d5bc13;
+    color: white;
 }
 
 .mat-column-id {
@@ -66,4 +82,12 @@
 .buttonFlex{
     display: flex;
     align-items: center;
+}
+
+th, td{
+    color: white !important;
+}
+
+.mat-mdc-select-value {
+    color: rgba(255, 255, 255, 0.87) !important;
 }
